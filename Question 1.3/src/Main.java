@@ -6,13 +6,9 @@ public class Main {
         Scanner strInput = new Scanner(System.in);
 
         ShapePrinter[] printing = new ShapePrinter[100];
-        SpherePrinter[] sphere = new SpherePrinter[100];
-        CuboidPrinter[] cuboid = new CuboidPrinter[100];
 
         for (int i = 0; i < printing.length; i++) {
             printing[i] = null;
-            sphere[i] = new SpherePrinter("", "", false, 0.0);
-            cuboid[i] = new CuboidPrinter("", "", false, 0.0, 0.0, 0.0, "");
         }
 
         System.out.println("Welcome to the 3D Printer Cost Calculator!");
@@ -54,7 +50,7 @@ public class Main {
                 System.out.print("Enter the radius (CM): ");
                 double radius = intInput.nextDouble();
 
-                sphere[sphereCount] = new SpherePrinter(jobId, material, isHollow, radius);
+                printing[sphereCount] = new SpherePrinter(jobId, material, isHollow, radius);
                 sphereCount++;
             } else if (choice == 2) {
                 System.out.print("Enter the length (CM): ");
@@ -76,7 +72,7 @@ public class Main {
                     edgeType = "Sharp";
                 }
 
-                cuboid[cuboidCount] = new CuboidPrinter(jobId, material, isHollow, length, width, height, edgeType);
+                printing[cuboidCount] = new CuboidPrinter(jobId, material, isHollow, length, width, height, edgeType);
                 cuboidCount++;
             }
 
@@ -86,20 +82,24 @@ public class Main {
         System.out.println("\nPrinting Jobs id that starts with '11' and use PLA material: ");
         System.out.println("----------------------------------------");
         for (int i = 0; i < numShapes; i++) {
-            if (sphere[i].getJobId().startsWith("11") && sphere[i].getMaterial().equals("PLA")) {
-                System.out.println(sphere[i]);
+            if (printing[i] instanceof SpherePrinter && printing[i].getJobId().startsWith("11")
+                    && printing[i].getMaterial().equals("PLA")) {
+                        System.out.println(printing[i]);
             }
 
-            if (cuboid[i].getJobId().startsWith("11") && cuboid[i].getMaterial().equals("PLA")) {
-                System.out.println(cuboid[i]);
+            if (printing[i] instanceof CuboidPrinter && printing[i].getJobId().startsWith("11")
+                    && printing[i].getMaterial().equals("PLA")) {
+                        System.out.println(printing[i]);
             }
 
-            if (cuboid[i].isHollow()) {
-                totalHeight += cuboid[i].getHeight();
+            // if (cuboid[i].isHollow()) {
+            if (printing[i] instanceof CuboidPrinter && printing[i].isHollow()) {
+                totalHeight += ((CuboidPrinter) printing[i]).getHeight();
             }
 
-            if (sphere[i].isHollow()) {
-                totalRadius += sphere[i].getRadius();
+            // if (sphere[i].isHollow()) {
+            if (printing[i] instanceof SpherePrinter && printing[i].isHollow()) {
+                totalHeight += ((SpherePrinter) printing[i]).getRadius() * 2;
             }
 
             System.out.println();
